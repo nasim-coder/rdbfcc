@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 let bookStockSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Types.ObjectId,
-        required: true
+        required: true,
+        ref: 'User'
     },
     bookname: {
         type: String,

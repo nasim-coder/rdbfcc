@@ -1,0 +1,24 @@
+{
+  "name": "book-inventry-mgmt",
+  "version": "1.0.0",
+  "description": "book inventory management system",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NakRex/book-inventry-mgmt.git"
+  },
+  "author": "n451m",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NakRex/book-inventry-mgmt/issues"
+  },
+  "homepage": "https://github.com/NakRex/book-inventry-mgmt#readme",
+  "dependencies": {
+    "express": "^4.17.3",
+    "json-web-token": "^3.2.0",
+    "mongoose": "^6.2.3"
+  }
+}

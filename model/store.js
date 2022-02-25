@@ -7,6 +7,7 @@ let storeSchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.Types.ObjectId,
+        ref: 'User',
         required: true,
         unique: true
     },

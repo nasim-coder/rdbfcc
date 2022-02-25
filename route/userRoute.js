@@ -7,7 +7,7 @@ userRouter.post('/signUp', controller.register);
 //route for login
 userRouter.post('/login', controller.login);
 //route to create a store
-userRouter.post('/createStore', controller.createStore);
+userRouter.post('/createStore/:id', controller.createStore);
 //route to add stock of books in a store
 userRouter.post('/addStock', controller.addStock);
 //add more book in a stock

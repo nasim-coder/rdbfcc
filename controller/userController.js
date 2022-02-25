@@ -1,15 +1,15 @@
 const User = require('../model/user')
 const bcrypt = require('bcryptjs');
 const jwt = require('json-web-token');
-
+const jwtconfig = require('../config/jwtconfig')
+const Store = require('../model/store');
+const { default: mongoose } = require('mongoose');
 
 //user register
 exports.register = async (req, res) => {
 
     const { name, email, password } = req.body;
-    
     let isAlreadyexist = await User.findOne({ email });
-
     if (!isAlreadyexist) {
         let user = new User({
             name: name,
@@ -48,12 +48,36 @@ exports.login = async (req, res) => {
 }
 
 //create store if it deoesnt exist
-exports.createStore = (req, res) => {
-    
+exports.createStore = async (req, res) => {
+    const { storename, id } = req.body;
+    let userid = mongoose.Types.ObjectId(id);
+    //check if the user already has store
+    let isStoreExist = await Store.findOne({ owner: userid })
+    //create store object
+    let store = new Store({
+        storename: storename,
+        owner: userid
+    });
+
+    if (!isStoreExist) {
+        await store.save((err, stock) => {
+            if (err) {
+                return res.status(500).send({msg:err.message})
+            } else {
+                return res.status(200).send({msg: 'Store created successfully'})
+            }
+        })
+    } else {
+        return res.status(501).send({msg:'you already have a store'}, isStoreExist)
+    }
 };
 
 //add stock in the store if the user has a store and same stock is not available in his store
 exports.addStock = (req, res) => {
+    const {id, }
+    let userid = mongoose.Types.ObjectId(id)
+    //check if the user already has store
+    let isStoreExist = await Store.findOne({ owner: userid })
     
 };
 

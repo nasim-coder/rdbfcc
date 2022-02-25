@@ -6,8 +6,7 @@
 2. Keep track of inventory (i.e.,number of copies) you have on every book.  
 3. On the backend, you need to keep track of books (along with their respective ID from Google
 4. Book API) and their inventory count.   
-5. When a book stock goes to zero, it is considered out of
-stock.  
+5. When a book stock goes to zero, it is considered out of stock.  
 6. Build a web portal, where users can login and can register their stores.  
 7. Here are the features of the portal:  
 8. List of all stores for the user.  

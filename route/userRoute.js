@@ -11,7 +11,7 @@ userRouter.post('/createStore/:id', controller.createStore);
 //route to add stock of books in a store
 userRouter.post('/addStock', controller.addStock);
 //add more book in a stock
-userRouter.put('/addbookinStock', controller.updateStock);
+userRouter.put('/addbookinStock', controller.addbookInStock);
 //delete a book from the stock
 userRouter.delete('/deleteBook/:isbn', controller.deleteBookfromStock);
 //see all the stores

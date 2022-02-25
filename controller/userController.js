@@ -75,7 +75,8 @@ exports.createStore = async (req, res) => {
 
 //add stock in the store if the user has a store and same stock is not available in his store
 exports.addStock = async (req, res) => {
-    const { id, bookname, author, price, isbn} = req.body;
+    const { id, bookname, author, price, isbn, store_id } = req.body;
+    let storeid = mongoose.Types.ObjectId(store_id)
     let userid = mongoose.Types.ObjectId(id)
     //check if the user already has store
     let isStoreExist = await Store.findOne({ owner: userid })
@@ -84,7 +85,9 @@ exports.addStock = async (req, res) => {
         owner: userid,
         bookname: bookname,
         author: author,
-        price:price
+        price: price,
+        isbn: isbn,
+        storeid:storeid
     })
     if (isStoreExist) {
         bookStock.save((err, bookStock) => {
@@ -96,7 +99,8 @@ exports.addStock = async (req, res) => {
             }
         })
         //adding the id of the book stock to the store
-       await isStoreExist.stock.push(bookStock.id)
+        await isStoreExist.stock.push(bookStock.id);
+        await isStoreExist.save();
 
     } else {
         return res.status(501).send({msg: 'Please create store first'})
@@ -104,8 +108,19 @@ exports.addStock = async (req, res) => {
 };
 
 //user add book in the exact stock if store and stock available and if the user is valid.
-exports.updateStock = (req, res) => {
-    
+exports.addbookInStock = (req, res) => {
+
+    let stockid = mongoose.Types.ObjectId(req.body.params)
+    let bookstock = await BookStock.findById(stockid);
+    let isbn = req.body.isbn;
+    bookstock.isbn.push(...isbn);
+    bookstock.save((err, isbn) => {
+        if (err) {
+            return res.status(500).send({msg: err.message})
+        } else {
+            return res.status(200).send({msg: 'inserted book successfully', isbn})
+        }
+    })
 };
 
 //valid store and stock holder delte a book
@@ -114,12 +129,23 @@ exports.deleteBookfromStock = (req, res) => {
 };
 
 //a normal user can see all the stores irrespective of the owner
-exports.viewStores = (req, res) => {
-    
+exports.viewStores = async (req, res) => {
+    let store = await Store.find({});
+    if (store) {
+        return res.status(200).send(store)
+    } else {
+        return res.status(404).send({msg:'no store found'})
+    }
 }
 
 //a normal user can see the available books in the store irrespective of the owner
-exports.viewStock = (req, res) => {
-    
+exports.viewStock = async (req, res) => {
+    let storeid = mongoose.Types.ObjectId(req.body.params);
+    let stocks = await BookStock.find({ storeid });
+    if (stocks) {
+       return res.status(200).send(stocks)
+    } else {
+        return res.status(404).send({msg:'no stock found'})
+    }
 }
 

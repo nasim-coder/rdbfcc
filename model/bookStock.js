@@ -6,6 +6,11 @@ let bookStockSchema = new mongoose.Schema({
         required: true,
         ref: 'User'
     },
+    store: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Store'
+    },
     bookname: {
         type: String,
         required: true

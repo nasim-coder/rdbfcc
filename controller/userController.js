@@ -4,6 +4,7 @@ const jwt = require('json-web-token');
 const jwtconfig = require('../config/jwtconfig')
 const Store = require('../model/store');
 const { default: mongoose } = require('mongoose');
+const BookStock = require('../model/bookStock')
 
 //user register
 exports.register = async (req, res) => {
@@ -73,12 +74,33 @@ exports.createStore = async (req, res) => {
 };
 
 //add stock in the store if the user has a store and same stock is not available in his store
-exports.addStock = (req, res) => {
-    const {id, }
+exports.addStock = async (req, res) => {
+    const { id, bookname, author, price, isbn} = req.body;
     let userid = mongoose.Types.ObjectId(id)
     //check if the user already has store
     let isStoreExist = await Store.findOne({ owner: userid })
-    
+    //create bookStock object
+    let bookStock = new BookStock({
+        owner: userid,
+        bookname: bookname,
+        author: author,
+        price:price
+    })
+    if (isStoreExist) {
+        bookStock.save((err, bookStock) => {
+            if (err) {
+                return res.status(500).send({msg:err.message})
+            }
+            else {
+                return res.status(200).send({msg: 'stock created successfully'})
+            }
+        })
+        //adding the id of the book stock to the store
+       await isStoreExist.stock.push(bookStock.id)
+
+    } else {
+        return res.status(501).send({msg: 'Please create store first'})
+    }
 };
 
 //user add book in the exact stock if store and stock available and if the user is valid.

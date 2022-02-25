@@ -20,7 +20,6 @@ let bookStockSchema = new mongoose.Schema({
     },
     isbn: [{
         type: Number,
-        required: true,
         unique: true
     }],
 });

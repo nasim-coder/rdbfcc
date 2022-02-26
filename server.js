@@ -8,8 +8,9 @@ mongoose.connect('mongodb://localhost:27017/bookInventry', () => {
     console.log('db connected');
 })
 
-app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use('/user', userRouter);
 
 app.listen(PORT, () => {

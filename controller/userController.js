@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const jwtconfig = require('../config/jwtconfig')
 const Store = require('../model/store');
-const { default: mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 const BookStock = require('../model/bookStock')
 
 //user register
@@ -75,19 +75,20 @@ exports.createStore = async (req, res) => {
 
 //add stock in the store if the user has a store and same stock is not available in his store
 exports.addStock = async (req, res) => {
-    const { id, bookname, author, price, isbn, store_id } = req.body;
-    let storeid = mongoose.Types.ObjectId(store_id)
-    let userid = mongoose.Types.ObjectId(id)
+    const {bookname, author, price, isbn} = req.body;
+    console.log(req.params);
+    let storeid = mongoose.Types.ObjectId(req.params.store_id)
+    let userid = mongoose.Types.ObjectId(req.params.id)
     //check if the user already has store
     let isStoreExist = await Store.findOne({ owner: userid })
+    console.log(isStoreExist);
     //create bookStock object
     let bookStock = new BookStock({
         owner: userid,
         bookname: bookname,
         author: author,
         price: price,
-        isbn: isbn,
-        storeid:storeid
+        store:storeid
     })
     if (isStoreExist) {
         bookStock.save((err, bookStock) => {
@@ -95,12 +96,13 @@ exports.addStock = async (req, res) => {
                 return res.status(500).send({msg:err.message})
             }
             else {
-                return res.status(200).send({msg: 'stock created successfully'})
+                isStoreExist.stock.push(bookStock.id);
+                isStoreExist.save();
+                return res.status(200).send({msg: 'stock created successfully', bookStock})
             }
         })
         //adding the id of the book stock to the store
-        await isStoreExist.stock.push(bookStock.id);
-        await isStoreExist.save();
+        
 
     } else {
         return res.status(501).send({msg: 'Please create store first'})

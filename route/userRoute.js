@@ -3,7 +3,7 @@ const userRouter = express.Router();
 const controller = require('../controller/userController');
 
 //route to register
-userRouter.post('/signUp', controller.register);
+userRouter.post('/signup', controller.register);
 //route for login
 userRouter.post('/login', controller.login);
 //route to create a store

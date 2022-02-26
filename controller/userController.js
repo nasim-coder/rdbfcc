@@ -1,6 +1,6 @@
 const User = require('../model/user')
 const bcrypt = require('bcryptjs');
-const jwt = require('json-web-token');
+const jwt = require('jsonwebtoken');
 const jwtconfig = require('../config/jwtconfig')
 const Store = require('../model/store');
 const { default: mongoose } = require('mongoose');
@@ -108,7 +108,7 @@ exports.addStock = async (req, res) => {
 };
 
 //user add book in the exact stock if store and stock available and if the user is valid.
-exports.addbookInStock = (req, res) => {
+exports.addbookInStock = async (req, res) => {
 
     let stockid = mongoose.Types.ObjectId(req.body.params)
     let bookstock = await BookStock.findById(stockid);
@@ -124,7 +124,7 @@ exports.addbookInStock = (req, res) => {
 };
 
 //valid store and stock holder delte a book
-exports.deleteBookfromStock = (req, res) => {
+exports.deleteBookfromStock = async (req, res) => {
     let isbn = req.params.isbn;
     let stocki_d = mongoose.Types.ObjectId(req.params.stockid);
     let sbc = await BookStock.updateOne({ _id: stocki_d }, { $pop: { isbn: 1 } })

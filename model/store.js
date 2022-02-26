@@ -18,4 +18,4 @@ let storeSchema = new mongoose.Schema({
 });
 
 let Store = mongoose.model('Store', storeSchema);
-module.eports = Store;
+module.exports = Store;

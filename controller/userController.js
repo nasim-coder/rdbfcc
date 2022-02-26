@@ -44,14 +44,14 @@ exports.login = async (req, res) => {
         user.token = token;
         res.status(200).json(user)
     } else {
-        res.status(400).send("invalid credential")
+        res.status(400).send({msg: "invalid credential"})
     }
 }
 
 //create store if it deoesnt exist
 exports.createStore = async (req, res) => {
-    const { storename, id } = req.body;
-    let userid = mongoose.Types.ObjectId(id);
+    const { storename} = req.body;
+    let userid = mongoose.Types.ObjectId(req.params);
     //check if the user already has store
     let isStoreExist = await Store.findOne({ owner: userid })
     //create store object

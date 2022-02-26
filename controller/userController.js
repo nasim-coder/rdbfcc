@@ -125,7 +125,10 @@ exports.addbookInStock = (req, res) => {
 
 //valid store and stock holder delte a book
 exports.deleteBookfromStock = (req, res) => {
-    
+    let isbn = req.params.isbn;
+    let stocki_d = mongoose.Types.ObjectId(req.params.stockid);
+    let sbc = await BookStock.updateOne({ _id: stocki_d }, { $pop: { isbn: 1 } })
+    BookStock.save();
 };
 
 //a normal user can see all the stores irrespective of the owner

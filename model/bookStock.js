@@ -23,10 +23,10 @@ let bookStockSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    isbn: [{
-        type: Number,
+    isbn: {
+        type: [Number],
         unique: true
-    }],
+    }
 });
 
 let BookStock = mongoose.model('BookStock', bookStockSchema);

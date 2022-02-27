@@ -88,22 +88,21 @@ exports.addStock = async (req, res) => {
         bookname: bookname,
         author: author,
         price: price,
-        store:storeid
+        store: storeid,
+        isbn:1
     })
     if (isStoreExist) {
-        bookStock.save((err, bookStock) => {
+       await bookStock.save((err, bookStock) => {
             if (err) {
                 return res.status(500).send({msg:err.message})
             }
             else {
+                //adding the id of the book stock to the store
                 isStoreExist.stock.push(bookStock.id);
                 isStoreExist.save();
                 return res.status(200).send({msg: 'stock created successfully', bookStock})
             }
         })
-        //adding the id of the book stock to the store
-        
-
     } else {
         return res.status(501).send({msg: 'Please create store first'})
     }
@@ -111,18 +110,17 @@ exports.addStock = async (req, res) => {
 
 //user add book in the exact stock if store and stock available and if the user is valid.
 exports.addbookInStock = async (req, res) => {
+    
+    let stockid = mongoose.Types.ObjectId(req.params.stock_id)
+    console.log(stockid);
+    let bookstock = await BookStock.find({stockid });
+    console.log(bookstock[0].isbn);
+    let isbnn = req.body.isbndata;
+    // console.log(isbnn);
+    await bookstock[0].isbn.push(isbnn);
+   bookstock.save()
+    return res.status(200).send({msg: 'inserted book successfully', isbnn})
 
-    let stockid = mongoose.Types.ObjectId(req.body.params)
-    let bookstock = await BookStock.findById(stockid);
-    let isbn = req.body.isbn;
-    bookstock.isbn.push(...isbn);
-    bookstock.save((err, isbn) => {
-        if (err) {
-            return res.status(500).send({msg: err.message})
-        } else {
-            return res.status(200).send({msg: 'inserted book successfully', isbn})
-        }
-    })
 };
 
 //valid store and stock holder delte a book

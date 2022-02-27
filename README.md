@@ -16,3 +16,5 @@
 12. Update inventory for an existing book.  
 14. Remove from the inventory.  
 
+npm install to install dependencies  
+npm start to start the server   
